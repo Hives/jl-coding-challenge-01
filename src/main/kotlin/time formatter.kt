@@ -15,6 +15,7 @@ fun formatTime(input: Int): String {
 }
 
 private val units = listOf(
+    Unit("day", 60 * 60 * 24),
     Unit("hour", 60 * 60),
     Unit("minute", 60),
     Unit("second", 1)
