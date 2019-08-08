@@ -7,12 +7,11 @@ fun formatTime(input: Int): String {
     val minutes = input / 60
 
     val secondsDescription = if (seconds == 1) "$seconds second" else "$seconds seconds"
+    val minutesDescription = if (minutes == 1) "$minutes minute" else "$minutes minutes"
 
     if (minutes == 0) {
         return secondsDescription
     } else {
-        val minutesDescription = "1 minute"
-
         if (seconds == 0) {
             return minutesDescription
         } else {
