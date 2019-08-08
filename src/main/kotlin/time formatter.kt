@@ -1,4 +1,5 @@
-private data class Unit(val name: String, val numberOfSeconds: Int)
+private data class Name(val singular: String, val plural: String)
+private data class Unit(val name: Name, val numberOfSeconds: Int)
 private data class UnitQuantity(val quantity: Int, val description: String)
 private var remainder = 0
 
@@ -15,16 +16,16 @@ fun formatTime(input: Int): String {
 }
 
 private val units = listOf(
-    Unit("year",   60 * 60 * 24 * 365),
-    Unit("day",    60 * 60 * 24),
-    Unit("hour",   60 * 60),
-    Unit("minute", 60),
-    Unit("second", 1)
+    Unit(Name("year",   "years"),   60 * 60 * 24 * 365),
+    Unit(Name("day",    "days"),    60 * 60 * 24),
+    Unit(Name("hour",   "hours"),   60 * 60),
+    Unit(Name("minute", "minutes"), 60),
+    Unit(Name("second", "seconds"), 1)
 )
 
 private fun extractUnit(unit: Unit): UnitQuantity {
     val quantity = remainder / unit.numberOfSeconds
-    val description = "$quantity ${unit.name}" + if (quantity != 1) "s" else ""
+    val description = "$quantity " + if (quantity == 1) unit.name.singular else unit.name.plural
     remainder -= quantity * unit.numberOfSeconds
     return UnitQuantity(quantity, description)
 }
