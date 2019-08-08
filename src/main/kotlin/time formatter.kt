@@ -1,21 +1,29 @@
-import kotlin.math.max
-
 fun formatTime(input: Int): String {
     if (input == 0) return "none"
 
-    val seconds = input % 60
-    val minutes = input / 60
+    val units:List<UnitQuantity> = listOf(
+        formatMinutes(input),
+        formatSeconds(input)
+    )
 
-    val secondsDescription = if (seconds == 1) "$seconds second" else "$seconds seconds"
-    val minutesDescription = if (minutes == 1) "$minutes minute" else "$minutes minutes"
-
-    if (minutes == 0) {
-        return secondsDescription
-    } else {
-        if (seconds == 0) {
-            return minutesDescription
-        } else {
-            return "$minutesDescription and $secondsDescription"
-        }
-    }
+    return joinUnits(units)
 }
+
+private data class UnitQuantity(val quantity: Int, val description: String)
+
+private fun formatSeconds(input: Int): UnitQuantity {
+    val name = "second"
+    val quantity = input % 60
+    val description = if (quantity == 1) "$quantity $name" else "$quantity ${name}s"
+    return UnitQuantity(quantity, description)
+}
+
+private fun formatMinutes(input: Int): UnitQuantity {
+    val name = "minute"
+    val quantity = input / 60
+    val description = if (quantity == 1) "$quantity $name" else "$quantity ${name}s"
+    return UnitQuantity(quantity, description)
+}
+
+private fun joinUnits(units: List<UnitQuantity>): String =
+    units.filter { it.quantity > 0 }.joinToString(" and ") { it.description }
