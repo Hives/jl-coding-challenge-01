@@ -82,4 +82,14 @@ internal class Time_formatterKtTest {
     fun `formatTime(60 * 60 * 24 * 365) returns "1 year"`() {
         assertEquals("1 year", formatTime(60 * 60 * 24 * 365))
     }
+
+    @Test
+    fun `challenge example - formatTime(94609440) returns "3 years and 24 minutes"`() {
+        assertEquals("3 years and 24 minutes", formatTime(94609440))
+    }
+
+    @Test
+    fun `challenge example - formatTime(273660) returns "3 days, 4 hours and 1 minute"`() {
+        assertEquals("3 days, 4 hours and 1 minute", formatTime(273660))
+    }
 }
