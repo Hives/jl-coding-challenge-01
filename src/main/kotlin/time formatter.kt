@@ -7,11 +7,18 @@ fun formatTime(input: Int): String {
 
     seconds = input
 
-    val unitQuantityDescriptions = units.map { extractUnit(it) }
+    val quantityDescriptions = units.map { extractUnit(it) }
         .filter { it.quantity > 0 }
         .map { it.description }
 
-    return unitQuantityDescriptions.joinToString(" and ")
+    if (quantityDescriptions.size > 2) {
+        return listOf(
+            quantityDescriptions.subList(0, quantityDescriptions.size - 1).joinToString(),
+            quantityDescriptions.last()
+        ).joinToString(" and ")
+    } else {
+       return quantityDescriptions.joinToString(" and ")
+    }
 }
 
 private val units = listOf(
