@@ -24,12 +24,10 @@ private val units = listOf(
 
 private fun extractUnit(unit: Unit): UnitQuantity {
     val quantity = remainder / unit.numberOfSeconds
-    val description = pluralise("$quantity ${unit.name}", quantity)
+    val description = "$quantity ${unit.name}" + if (quantity != 1) "s" else ""
     remainder -= quantity * unit.numberOfSeconds
     return UnitQuantity(quantity, description)
 }
-
-private fun pluralise(string: String, number: Int) = if (number == 1) string else string + "s"
 
 private fun joinDescriptions(descriptions: List<String>): String =
     if (descriptions.size >= 3) {
