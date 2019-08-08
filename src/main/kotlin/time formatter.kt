@@ -1,5 +1,6 @@
 fun formatTime(input: Int): String {
     if (input == 0) return "none"
-    return "1 second"
+    if (input == 1) return "1 second"
+    return "2 seconds"
 }
 
