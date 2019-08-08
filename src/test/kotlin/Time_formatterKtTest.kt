@@ -22,4 +22,9 @@ internal class Time_formatterKtTest {
     fun `formatTime(59) returns "59 seconds"`() {
         assertEquals("59 seconds", formatTime(59))
     }
+
+    @Test
+    fun `formatTime(60) returns "1 minute"`() {
+        assertEquals("1 minute", formatTime(60))
+    }
 }
