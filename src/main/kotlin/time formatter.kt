@@ -1,19 +1,19 @@
-private data class Name(val singular: String, val plural: String)
-private data class Unit(val name: Name, val numberOfSeconds: Int)
-private data class UnitQuantity(val quantity: Int, val description: String)
-private var remainder = 0
-
 fun formatTime(input: Int): String {
     if (input == 0) return "none"
 
-    remainder = input
+    remainingSeconds = input
 
-    val quantityDescriptions = units.map { extractUnit(it) }
-        .filter { it.quantity > 0 }
-        .map { it.description }
+    val quantityDescriptions = units.map {
+        val quantity = getQuantityOfUnit(it)
+        makeHumanReadable(quantity, it)
+    }.filterNotNull()
 
     return joinDescriptions(quantityDescriptions)
 }
+
+private data class Name(val singular: String, val plural: String)
+private data class Unit(val name: Name, val numberOfSeconds: Int)
+private var remainingSeconds = 0
 
 private val units = listOf(
     Unit(Name("year",   "years"),   60 * 60 * 24 * 365),
@@ -23,12 +23,18 @@ private val units = listOf(
     Unit(Name("second", "seconds"), 1)
 )
 
-private fun extractUnit(unit: Unit): UnitQuantity {
-    val quantity = remainder / unit.numberOfSeconds
-    val description = "$quantity " + if (quantity == 1) unit.name.singular else unit.name.plural
-    remainder -= quantity * unit.numberOfSeconds
-    return UnitQuantity(quantity, description)
+private fun getQuantityOfUnit(unit: Unit): Int {
+    val quantity = remainingSeconds / unit.numberOfSeconds
+    remainingSeconds -= quantity * unit.numberOfSeconds
+    return quantity
 }
+
+private fun makeHumanReadable(quantity: Int, unit: Unit): String? =
+    if (quantity == 0) {
+        null
+    } else {
+        "$quantity " + if (quantity == 1) unit.name.singular else unit.name.plural
+    }
 
 private fun joinDescriptions(descriptions: List<String>): String =
     if (descriptions.size >= 3) {
