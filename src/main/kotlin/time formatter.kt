@@ -5,7 +5,8 @@ fun formatTime(input: Int): String {
 
     remainingSeconds = input
 
-    val quantityDescriptions = units.map { UnitQuantity(it, getQuantityOfUnit(it)) }
+    val quantityDescriptions = units.sortedByDescending { it.numberOfSeconds }
+        .map { UnitQuantity(it, getQuantityOfUnit(it)) }
         .filter { it.quantity != 0 }
         .map { makeHumanReadable(it) }
 
@@ -15,12 +16,12 @@ fun formatTime(input: Int): String {
 private data class Unit(val singularName: String, val pluralName: String, val numberOfSeconds: Int)
 private data class UnitQuantity(val unit: Unit, val quantity: Int)
 
-private val units = listOf(
-    Unit("year",   "years",   60 * 60 * 24 * 365),
-    Unit("day",    "days",    60 * 60 * 24),
-    Unit("hour",   "hours",   60 * 60),
+private val units = setOf(
+    Unit("second", "seconds", 1),
     Unit("minute", "minutes", 60),
-    Unit("second", "seconds", 1)
+    Unit("hour",   "hours",   60 * 60),
+    Unit("day",    "days",    60 * 60 * 24),
+    Unit("year",   "years",   60 * 60 * 24 * 365)
 )
 
 private fun getQuantityOfUnit(unit: Unit): Int {
