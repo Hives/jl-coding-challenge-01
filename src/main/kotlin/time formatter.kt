@@ -5,15 +5,15 @@ fun formatTime(input: Int): String {
 
     remainingSeconds = input
 
-    val quantityDescriptions = units.map {
-        val quantity = getQuantityOfUnit(it)
-        makeHumanReadable(quantity, it)
-    }.filterNotNull()
+    val quantityDescriptions = units.map { UnitQuantity(it, getQuantityOfUnit(it)) }
+        .filter { it.quantity != 0 }
+        .map { makeHumanReadable(it) }
 
     return joinDescriptions(quantityDescriptions)
 }
 
 private data class Unit(val singularName: String, val pluralName: String, val numberOfSeconds: Int)
+private data class UnitQuantity(val unit: Unit, val quantity: Int)
 
 private val units = listOf(
     Unit("year",   "years",   60 * 60 * 24 * 365),
@@ -29,12 +29,8 @@ private fun getQuantityOfUnit(unit: Unit): Int {
     return quantity
 }
 
-private fun makeHumanReadable(quantity: Int, unit: Unit): String? =
-    if (quantity == 0) {
-        null
-    } else {
-        "$quantity " + if (quantity == 1) unit.singularName else unit.pluralName
-    }
+private fun makeHumanReadable(uq: UnitQuantity): String =
+    "${uq.quantity} " + if (uq.quantity == 1) uq.unit.singularName else uq.unit.pluralName
 
 private fun joinDescriptions(descriptions: List<String>): String =
     if (descriptions.size >= 3) {
